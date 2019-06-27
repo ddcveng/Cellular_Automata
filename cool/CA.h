@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <bitset>
-#include <Windows.h>
+//#include <Windows.h>
 
 class CA
 {
@@ -11,8 +11,8 @@ class CA
 	char m_type;
 	std::vector<std::vector<bool>> cells2D;
 	std::vector<std::vector<bool>> next_gen2D;
-	HANDLE console;
-	_SECURITY_ATTRIBUTES secatt;
+	//HANDLE console;
+	//_SECURITY_ATTRIBUTES secatt;
 public:
 	CA(char type, int rows, int cols);
 
@@ -20,5 +20,5 @@ public:
 	void generate2Dboard();
 	void tick();
 	bool Conway_rules(int live_neighbors, bool my_state);
-	void clear_screen();
+	int constrain(int index, int max);
 };

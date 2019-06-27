@@ -12,8 +12,8 @@ CA::CA(char type, int rows, int cols)
 	,m_type(type)
 	,cells2D(m_rows)
 	,next_gen2D(m_rows)
-	,secatt()
-	,console(CreateFileA("CONOUT$", GENERIC_WRITE, FILE_SHARE_WRITE,&secatt,OPEN_EXISTING, NULL, NULL))
+	//,secatt()
+	//,console(CreateFileA("CONOUT$", GENERIC_WRITE, FILE_SHARE_WRITE,&secatt,OPEN_EXISTING, NULL, NULL))
 		//CreateConsoleScreenBuffer(GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CONSOLE_TEXTMODE_BUFFER, NULL))
 
 {
@@ -27,6 +27,13 @@ int CA::neighborhood2D(int X, int Y)
 	int tempX;
 	int tempY;
 	
+	for (tempX = X - 1; tempX != X + 2; ++tempX) {
+		for (tempY = Y - 1; tempY != Y + 2; ++tempY) {
+			if (tempX == X && tempY == Y) continue;
+			if (cells2D[constrain(tempX, m_rows)][constrain(tempY, m_cols)]) ++count;
+		}
+	}
+	/*
 	for (tempX = X - 1; tempX != X + 2; ++tempX) {
 		for (tempY = Y - 1; tempY != Y + 2; ++tempY) {
 			if (tempX == X && tempY == Y) {
@@ -60,7 +67,7 @@ int CA::neighborhood2D(int X, int Y)
 				if (cells2D[tempX][tempY]) ++count;
 			}
 		}
-	}
+	}*/
 	return count;
 }
 
@@ -77,7 +84,6 @@ void CA::generate2Dboard()
 
 void CA::tick()
 {
-	clear_screen();
 	std::stringstream ss;
 	unsigned long x = 0;
 	unsigned long length = 0;
@@ -95,8 +101,9 @@ void CA::tick()
 		}
 		cells2D = next_gen2D;
 		length = ss.str().length();
+		puts(ss.str().c_str());
 		//std::cout << ss.str().c_str();
-		WriteConsole(console, ss.str().c_str(), length, &x, NULL);
+		//WriteConsole(console, ss.str().c_str(), length, &x, NULL);
 		break;
 	default:
 		break;
@@ -107,19 +114,10 @@ void CA::tick()
 
 bool CA::Conway_rules(int live_neighbors, bool my_state)
 {
-	switch (my_state)
-	{
-	case false:
-		return live_neighbors == 3 ? true : false;
-		break;
-	case true:
-		if		(live_neighbors >  3) return false;
-		else if (live_neighbors >= 2) return true;
-		else						  return false;
-		break;
-	}
+    if (live_neighbors == 2) return my_state;
+    return live_neighbors == 3;
 }
-
+/*
 void CA::clear_screen()
 {
 	char fill = ' ';
@@ -131,4 +129,10 @@ void CA::clear_screen()
 	FillConsoleOutputCharacter(console, fill, cells, tl, &written);
 	FillConsoleOutputAttribute(console, s.wAttributes, cells, tl, &written);
 	SetConsoleCursorPosition(console, tl);
+}
+*/
+int CA::constrain(int index, int max){
+	if 		(index < 0)	   return index+max;
+	else if (index >= max) return index-max;
+	else				   return index;
 }
