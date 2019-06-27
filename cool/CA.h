@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <bitset>
-//#include <Windows.h>
 
 class CA
 {
@@ -11,8 +10,7 @@ class CA
 	char m_type;
 	std::vector<std::vector<bool>> cells2D;
 	std::vector<std::vector<bool>> next_gen2D;
-	//HANDLE console;
-	//_SECURITY_ATTRIBUTES secatt;
+
 public:
 	CA(char type, int rows, int cols);
 

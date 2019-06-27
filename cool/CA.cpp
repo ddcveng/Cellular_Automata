@@ -1,5 +1,4 @@
 #include "CA.h"
-#include <iostream>
 #include <sstream>
 #include <ctime>
 
@@ -12,10 +11,6 @@ CA::CA(char type, int rows, int cols)
 	,m_type(type)
 	,cells2D(m_rows)
 	,next_gen2D(m_rows)
-	//,secatt()
-	//,console(CreateFileA("CONOUT$", GENERIC_WRITE, FILE_SHARE_WRITE,&secatt,OPEN_EXISTING, NULL, NULL))
-		//CreateConsoleScreenBuffer(GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CONSOLE_TEXTMODE_BUFFER, NULL))
-
 {
 	generate2Dboard();
 }
@@ -33,41 +28,7 @@ int CA::neighborhood2D(int X, int Y)
 			if (cells2D[constrain(tempX, m_rows)][constrain(tempY, m_cols)]) ++count;
 		}
 	}
-	/*
-	for (tempX = X - 1; tempX != X + 2; ++tempX) {
-		for (tempY = Y - 1; tempY != Y + 2; ++tempY) {
-			if (tempX == X && tempY == Y) {
-				continue;
-			}
-			else if (tempX == -1 && tempY == -1) {
-				if (cells2D[m_rows -1][m_cols -1]) ++count;
-			}
-			else if (tempX == m_rows && tempY == m_cols) {
-				if (cells2D[0][0] == 1) ++count;
-			}
-			else if (tempX == -1 && tempY == m_cols) {
-				if (cells2D[m_rows -1][0]) ++count;
-			}
-			else if (tempX == m_rows && tempY == -1) {
-				if (cells2D[0][m_cols -1]) ++count;
-			}
-			else if (tempX == -1 && tempY != -1) {
-				if (cells2D[m_rows - 1][tempY]) ++count;
-			}
-			else if (tempX == m_rows && tempY != m_cols) {
-				if (cells2D[0][tempY]) ++count;
-			}
-			else if (tempY == -1 && tempX != -1) {
-				if (cells2D[tempX][m_cols - 1]) ++count;
-			}
-			else if (tempY == m_cols && tempX != m_rows) {
-				if (cells2D[tempX][0]) ++count;
-			}
-			else {
-				if (cells2D[tempX][tempY]) ++count;
-			}
-		}
-	}*/
+
 	return count;
 }
 
@@ -101,9 +62,9 @@ void CA::tick()
 		}
 		cells2D = next_gen2D;
 		length = ss.str().length();
+		
 		puts(ss.str().c_str());
-		//std::cout << ss.str().c_str();
-		//WriteConsole(console, ss.str().c_str(), length, &x, NULL);
+		
 		break;
 	default:
 		break;
@@ -117,20 +78,7 @@ bool CA::Conway_rules(int live_neighbors, bool my_state)
     if (live_neighbors == 2) return my_state;
     return live_neighbors == 3;
 }
-/*
-void CA::clear_screen()
-{
-	char fill = ' ';
-	COORD tl = { 0,0 };
-	CONSOLE_SCREEN_BUFFER_INFO s;
-	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	GetConsoleScreenBufferInfo(console, &s);
-	DWORD written, cells = s.dwSize.X * s.dwSize.Y;
-	FillConsoleOutputCharacter(console, fill, cells, tl, &written);
-	FillConsoleOutputAttribute(console, s.wAttributes, cells, tl, &written);
-	SetConsoleCursorPosition(console, tl);
-}
-*/
+
 int CA::constrain(int index, int max){
 	if 		(index < 0)	   return index+max;
 	else if (index >= max) return index-max;
